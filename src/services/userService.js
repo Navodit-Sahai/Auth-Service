@@ -41,6 +41,23 @@ class UserService{
             throw error;
         }
     }
+    async isAuthenticated(token){
+        try{
+            const response=await this.verifyToken(token);
+            if(!response){
+                throw {error:'invalid token'};
+            }
+            const user=await this.userRepository.getById(response.id);
+            if(!user){
+                throw {error:'no user with this credentials'};
+
+            }
+            return user.id;
+        }catch(error){
+            console.log(error.message);
+            throw error;
+        }
+    }
     
     createToken(user){
         try{
